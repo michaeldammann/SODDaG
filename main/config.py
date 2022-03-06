@@ -2,7 +2,7 @@
 Global configurations
 '''
 
-N_IMAGES = 15
+N_IMAGES = 10000
 '''
 N_IMAGES: Number of images to be generated
 '''
@@ -47,7 +47,7 @@ MAX_SIZE: Maximum size of object in "Matplotlib Dimensions"
 E.g., if IMG_HEIGHT=15 and MAX_SIZE=8, then an objects spans at maximum 8/15 of the height of the image
 '''
 
-EDGE_BUFFER = 1.0
+EDGE_BUFFER = 0.5
 '''
 EDGE_BUFFER: Minimum distance between frame and center of object 
 (depending on MAX_SIZE, objects might still go over image limits)

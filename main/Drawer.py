@@ -10,6 +10,7 @@ class Drawer:
     def __init__(self):
         self.shapes=self.init_shapes()
         random.seed(config.GENERATION_SEED)
+        self.fig, self.ax = plt.subplots()
         #Generate save paths if not exist
         Path('..', config.ROOTSAVEDIR).mkdir(parents=True, exist_ok=True)
         Path('..', config.ROOTSAVEDIR, 'imgs').mkdir(parents=True, exist_ok=True)
@@ -29,17 +30,17 @@ class Drawer:
 
     def init_plt(self):
         # define Matplotlib figure and axis
-        fig, ax = plt.subplots()
-        ax.axes.xaxis.set_visible(False)
-        ax.axes.yaxis.set_visible(False)
+        plt.cla()
+        self.ax.axes.xaxis.set_visible(False)
+        self.ax.axes.yaxis.set_visible(False)
 
-        ax.set_xlim([0, config.IMG_WIDTH])
-        ax.set_ylim([0, config.IMG_HEIGHT])
+        self.ax.set_xlim([0, config.IMG_WIDTH])
+        self.ax.set_ylim([0, config.IMG_HEIGHT])
 
-        ax.spines['top'].set_visible(config.SHOW_FRAME)
-        ax.spines['right'].set_visible(config.SHOW_FRAME)
-        ax.spines['bottom'].set_visible(config.SHOW_FRAME)
-        ax.spines['left'].set_visible(config.SHOW_FRAME)
+        self.ax.spines['top'].set_visible(config.SHOW_FRAME)
+        self.ax.spines['right'].set_visible(config.SHOW_FRAME)
+        self.ax.spines['bottom'].set_visible(config.SHOW_FRAME)
+        self.ax.spines['left'].set_visible(config.SHOW_FRAME)
 
         plt.gca().set_axis_off()
         plt.subplots_adjust(top=1, bottom=0, right=1, left=0,
@@ -48,7 +49,6 @@ class Drawer:
         plt.gca().xaxis.set_major_locator(plt.NullLocator())
         plt.gca().yaxis.set_major_locator(plt.NullLocator())
 
-        return fig, ax
 
     def add_rectangle(self, ax):
         '''
@@ -94,11 +94,11 @@ class Drawer:
 
 
     def save_single_image(self, i_img):
-        fig, ax = self.init_plt()
+        self.init_plt()
         n_objects = random.randint(config.N_OBJECTS_MIN, config.N_OBJECTS_MAX)
         bboxes={} #entries are (x_min, x_max, y_min, y_max)
         for obj_i in range(n_objects):
-            bbox, class_obj=random.sample(self.shapes, 1)[0](ax)
+            bbox, class_obj=random.sample(self.shapes, 1)[0](self.ax)
             bboxes[class_obj]=bbox
 
         # display plot
@@ -107,6 +107,11 @@ class Drawer:
                     pad_inches=0.0)
         with open(Path('..', config.ROOTSAVEDIR, 'bboxes', str(i_img) + '.json'), 'w') as fp:
             json.dump(bboxes, fp)
+        '''
+        fig.clear()
+        plt.close(fig)
+        plt.close()
+        '''
 
 
 
