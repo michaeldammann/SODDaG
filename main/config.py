@@ -2,7 +2,7 @@
 Global configurations
 '''
 
-N_IMAGES = 10000
+N_IMAGES = 100
 '''
 N_IMAGES: Number of images to be generated
 '''
@@ -60,4 +60,15 @@ SHOW_FRAME: Whether to show black frame around image'''
 ROOTSAVEDIR = 'dataset'
 '''
 ROOTSAVEDIR: Where generated dataset will be located
+'''
+
+DRAW_BBOXES_MODE = True
+'''
+DRAW_BBOXES_MODE: Mode that adds bboxes of already generated images to those images 
+(in a new directory, original images not overwritten). Mainly used for testing.
+'''
+
+N_DRAWN_BBOXES = 100
+'''
+N_DRAWN_BBOXES: If DRAW_BBOXES_MODE: Number of Images with BBoxes to be drawn.
 '''
