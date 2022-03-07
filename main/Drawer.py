@@ -6,20 +6,21 @@ from pathlib import Path
 import numpy as np
 import json
 
+
 class Drawer:
     def __init__(self):
-        self.shapes=self.init_shapes()
+        self.shapes = self.init_shapes()
         random.seed(config.GENERATION_SEED)
         self.fig, self.ax = plt.subplots()
-        #Generate save paths if not exist
+        # Generate save paths if not exist
         Path('..', config.ROOTSAVEDIR).mkdir(parents=True, exist_ok=True)
         Path('..', config.ROOTSAVEDIR, 'imgs').mkdir(parents=True, exist_ok=True)
         Path('..', config.ROOTSAVEDIR, 'bboxes').mkdir(parents=True, exist_ok=True)
 
     def init_shapes(self):
-        all_shapes=[]
+        all_shapes = []
         for shape in config.SHAPES:
-            if shape =='RECTANGLE':
+            if shape == 'RECTANGLE':
                 all_shapes.append(self.add_rectangle)
             elif shape == 'CIRCLE':
                 all_shapes.append(self.add_circle)
@@ -49,7 +50,6 @@ class Drawer:
         plt.gca().xaxis.set_major_locator(plt.NullLocator())
         plt.gca().yaxis.set_major_locator(plt.NullLocator())
 
-
     def add_rectangle(self, ax):
         '''
         Adds a rectangle at random location with random size to given axes.
@@ -68,8 +68,7 @@ class Drawer:
         xy_min = np.clip((np.array(xy_orig) - np.array(dxy_orig)) / config.IMG_WIDTH, 0., 1.)
         xy_max = np.clip((np.array(xy_orig) + np.array(dxy_orig)) / config.IMG_HEIGHT, 0., 1.)
 
-        return {'x_min':xy_min[0], 'x_max':xy_max[0], 'y_min':xy_min[1], 'y_max':xy_max[1]}, 'rectangle'
-
+        return {'x_min': xy_min[0], 'x_max': xy_max[0], 'y_min': xy_min[1], 'y_max': xy_max[1]}, 'rectangle'
 
     def add_circle(self, ax):
         '''
@@ -78,10 +77,10 @@ class Drawer:
         :return: Relative bounding box of the generated and drawn circle
         '''
 
-        xy_orig=(random.uniform(config.EDGE_BUFFER, config.IMG_WIDTH - config.EDGE_BUFFER),
-                             random.uniform(config.EDGE_BUFFER, config.IMG_HEIGHT - config.EDGE_BUFFER))
-        radius=random.uniform(config.MIN_SIZE / 2, config.MAX_SIZE / 2)
-        ax.add_patch(Circle(xy_orig,radius,
+        xy_orig = (random.uniform(config.EDGE_BUFFER, config.IMG_WIDTH - config.EDGE_BUFFER),
+                   random.uniform(config.EDGE_BUFFER, config.IMG_HEIGHT - config.EDGE_BUFFER))
+        radius = random.uniform(config.MIN_SIZE / 2, config.MAX_SIZE / 2)
+        ax.add_patch(Circle(xy_orig, radius,
                             facecolor=(random.uniform(0., 1.), random.uniform(0., 1.), random.uniform(0., 1.)),
                             edgecolor=(random.uniform(0., 1.), random.uniform(0., 1.), random.uniform(0., 1.))
                             ))
@@ -89,17 +88,15 @@ class Drawer:
         xy_min = np.clip((np.array(xy_orig) - radius) / config.IMG_WIDTH, 0., 1.)
         xy_max = np.clip((np.array(xy_orig) + radius) / config.IMG_HEIGHT, 0., 1.)
 
-        return {'x_min':xy_min[0], 'x_max':xy_max[0], 'y_min':xy_min[1], 'y_max':xy_max[1]}, 'circle'
-
-
+        return {'x_min': xy_min[0], 'x_max': xy_max[0], 'y_min': xy_min[1], 'y_max': xy_max[1]}, 'circle'
 
     def save_single_image(self, i_img):
         self.init_plt()
         n_objects = random.randint(config.N_OBJECTS_MIN, config.N_OBJECTS_MAX)
-        bboxes={} #entries are (x_min, x_max, y_min, y_max)
+        bboxes = []  # entries are (x_min, x_max, y_min, y_max)
         for obj_i in range(n_objects):
-            bbox, class_obj=random.sample(self.shapes, 1)[0](self.ax)
-            bboxes[class_obj]=bbox
+            bbox, class_obj = random.sample(self.shapes, 1)[0](self.ax)
+            bboxes.append({class_obj:bbox})
 
         # display plot
         plt.savefig(Path('..', config.ROOTSAVEDIR, 'imgs', str(i_img) + '.png'),
@@ -112,7 +109,3 @@ class Drawer:
         plt.close(fig)
         plt.close()
         '''
-
-
-
-
