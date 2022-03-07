@@ -62,7 +62,7 @@ ROOTSAVEDIR = 'dataset'
 ROOTSAVEDIR: Where generated dataset will be located
 '''
 
-DRAW_BBOXES_MODE = True
+DRAW_BBOXES_MODE = False
 '''
 DRAW_BBOXES_MODE: Mode that adds bboxes of already generated images to those images 
 (in a new directory, original images not overwritten). Mainly used for testing.
